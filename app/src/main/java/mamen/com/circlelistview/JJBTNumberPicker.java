@@ -18,7 +18,7 @@ import java.util.List;
 
 public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListener{
 
-    public static final float DIFFERENT = 10;
+    public static final float DIFFERENT = 1;
     public static final float DEFAULT_CURRENT_Y = 0;
     public static final float DEFAULT_PREV_Y = -240;
     public static final float DEFAULT_NEXT_Y = 240;
@@ -89,14 +89,17 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        if(event.getAction() == MotionEvent.ACTION_MOVE) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            //user first touch
+            oldY = event.getY();
+        } else if(event.getAction() == MotionEvent.ACTION_MOVE) {
 
-            boolean isScrollUp = oldY - event.getY() > 0.1;
+            float different = oldY - event.getY();
 
-            if(isScrollUp){ // keatas itemnya
-                setScrollUp();
+            if(different > 0.1){ // keatas itemnya
+                setScrollUp(different);
             }else { //kebawah
-                setScrollDown();
+                setScrollDown(-different);
             }
 
             oldY = event.getY();
@@ -110,13 +113,13 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
                 if (differentInCurrent <= differentInNext) {
                     //visible for current
                     while (differentInCurrent > DEFAULT_CURRENT_Y) {
-                        setScrollDown();
+                        setScrollDown(DIFFERENT);
                         differentInCurrent -= DIFFERENT;
                     }
                 } else {
                     //visible for next
                     while (differentInNext > DEFAULT_CURRENT_Y) {
-                        setScrollUp();
+                        setScrollUp(DIFFERENT);
                         differentInNext -= DIFFERENT;
                     }
                 }
@@ -127,13 +130,13 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
                 if (differentInCurrent <= differentInPrev) {
                     //visible for current
                     while (differentInCurrent > DEFAULT_CURRENT_Y) {
-                        setScrollUp();
+                        setScrollUp(DIFFERENT);
                         differentInCurrent -= DIFFERENT;
                     }
                 } else {
                     //visible for next
                     while (differentInPrev > DEFAULT_CURRENT_Y) {
-                        setScrollDown();
+                        setScrollDown(DIFFERENT);
                         differentInPrev -= DIFFERENT;
                     }
                 }
@@ -143,10 +146,10 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         return true;
     }
 
-    private void setScrollDown() {
-        next.setY(next.getY() + DIFFERENT);
-        current.setY(current.getY() + DIFFERENT);
-        prev.setY(prev.getY() + DIFFERENT);
+    private void setScrollDown(float different) {
+        next.setY(next.getY() + different);
+        current.setY(current.getY() + different);
+        prev.setY(prev.getY() + different);
 
         if(prev.getY() >= DEFAULT_CURRENT_Y){
             next.setY(DEFAULT_PREV_Y);
@@ -171,10 +174,10 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         }
     }
 
-    private void setScrollUp() {
-        prev.setY(prev.getY() - DIFFERENT);
-        current.setY(current.getY() - DIFFERENT);
-        next.setY(next.getY() - DIFFERENT);
+    private void setScrollUp(float different) {
+        prev.setY(prev.getY() - different);
+        current.setY(current.getY() - different);
+        next.setY(next.getY() - different);
 
         if(next.getY() <= DEFAULT_CURRENT_Y){
 
