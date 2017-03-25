@@ -75,7 +75,13 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
     public void setValue(int from, int until, int startFromIndex){
         indexOfCurrent = startFromIndex;
 
-        for(int datum = from ; datum <= until ; datum++)data.add(String.valueOf(datum));
+        for(int datum = from ; datum <= until ; datum++){
+            if(datum < 10){
+                data.add("0"+datum);
+            }else {
+                data.add(String.valueOf(datum));
+            }
+        }
 
         if(indexOfCurrent==0)prev.setText(data.get(data.size()-1));
         else prev.setText(data.get(indexOfCurrent-1));
@@ -239,5 +245,9 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
             }
 
         }
+    }
+
+    public int getNumber(){
+        return Integer.valueOf(data.get(indexOfCurrent));
     }
 }

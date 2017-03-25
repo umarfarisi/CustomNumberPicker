@@ -13,21 +13,69 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@android:color/black"
-        android:layout_above="@+id/numberPicker"
+        android:layout_above="@+id/timeContainer"
         android:layout_margin="2dp"/>
-    <mamen.com.circlelistview.JJBTNumberPicker
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:id="@+id/numberPicker"
+    <LinearLayout
+        android:id="@+id/timeContainer"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:orientation="vertical"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <mamen.com.circlelistview.JJBTNumberPicker
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:id="@+id/fromHourPicker"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="110dp"
+            android:orientation="vertical"/>
+        <mamen.com.circlelistview.JJBTNumberPicker
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:id="@+id/fromMinutePicker"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="110dp"
+            android:orientation="vertical"/>
+
+        <TextView
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=":"
+            android:textSize="60dp"/>
+
+        <mamen.com.circlelistview.JJBTNumberPicker
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:id="@+id/untilHourPicker"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="110dp"
+            android:orientation="vertical"/>
+        <mamen.com.circlelistview.JJBTNumberPicker
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:id="@+id/untilMinutePicker"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="110dp"
+            android:orientation="vertical"/>
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@android:color/black"
-        android:layout_below="@+id/numberPicker"
+        android:layout_below="@+id/timeContainer"
         android:layout_margin="2dp"/>
+
+    <Button
+        android:text="Show"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="onClickShowTime"/>
 
 
 </RelativeLayout>
