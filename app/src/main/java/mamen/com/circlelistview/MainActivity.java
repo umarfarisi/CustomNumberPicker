@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         numberPicker = (JJBTNumberPicker) findViewById(R.id.numberPicker);
-        numberPicker.setValue(0,3,0);
+        numberPicker.setValue(0,24,0);
 
     }
 
