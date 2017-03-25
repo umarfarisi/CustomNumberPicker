@@ -2,9 +2,11 @@ package mamen.com.circlelistview;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         layout = (LinearLayout) findViewById(R.id.layout);
 
-        layout.setOnTouchListener(new JJBTNumberPicker(0,24));
+        layout.setOnTouchListener(new JJBTNumberPicker(0,5,0));
 
     }
 
@@ -37,19 +39,22 @@ public class MainActivity extends AppCompatActivity {
 
         private float eventY;
 
-        private View prev;
-        private View current;
-        private View next;
+        private TextView prev;
+        private TextView current;
+        private TextView next;
 
-        private List<Integer> data;
+        private List<String> data;
 
-        public JJBTNumberPicker(int from, int until) {
+        private int index;
+
+        public JJBTNumberPicker(int from, int until, int startFromIndex) {
             eventY = 0;
-            prev = null;
-            current = null;
-            next = null;
+
+            index = startFromIndex;
+
             data = new ArrayList<>();
-            for(int datum = from ; datum <= until ; datum++)data.add(datum);
+            for(int datum = from ; datum <= until ; datum++)data.add(String.valueOf(datum));
+
         }
 
         @Override
@@ -57,12 +62,19 @@ public class MainActivity extends AppCompatActivity {
 
             if(event.getAction() == MotionEvent.ACTION_MOVE || event.getY() == MotionEvent.ACTION_BUTTON_RELEASE) {
 
-                LinearLayout layout = (LinearLayout) v;
+                if(prev == null || current == null || next == null){
 
-                if (prev == null || current == null || next == null){
-                    prev = layout.getChildAt(PREV_INDEX);
-                    current = layout.getChildAt(CURRENT_INDEX);
-                    next = layout.getChildAt(NEXT_INDEX);
+                    LinearLayout layout = (LinearLayout) v;
+
+                    prev = (TextView) layout.getChildAt(PREV_INDEX);
+                    current = (TextView) layout.getChildAt(CURRENT_INDEX);
+                    next = (TextView) layout.getChildAt(NEXT_INDEX);
+
+                    if(index==0)prev.setText(data.get(data.size()-1));
+                    else prev.setText(data.get(index-1));
+                    current.setText(data.get(index));
+                    if(index==data.size()-1)next.setText(data.get(0));
+                    else next.setText(data.get(index+1));
                 }
 
                 boolean isScrollUp = eventY - event.getY() > 0;
@@ -73,12 +85,22 @@ public class MainActivity extends AppCompatActivity {
                     next.setY(next.getY() - DIFFERENT);
 
                     if(next.getY() == DEFAULT_CURRENT_Y){
+
                         prev.setY(DEFAULT_NEXT_Y);
 
-                        View temp = prev;
+                        prev.setText(data.get(index));
+
+                        TextView temp = prev;
                         prev = current;
                         current = next;
                         next = temp;
+
+                        index++;
+
+                        if(index == data.size()){
+                            index = 0;
+                        }
+
                     }
                 }else { //kebawah
                     next.setY(next.getY() + DIFFERENT);
@@ -88,10 +110,19 @@ public class MainActivity extends AppCompatActivity {
                     if(prev.getY() == DEFAULT_CURRENT_Y){
                         next.setY(DEFAULT_PREV_Y);
 
-                        View temp = current;
+                        next.setText(data.get(index));
+
+                        TextView temp = current;
                         current = prev;
                         prev = next;
                         next = temp;
+
+                        index--;
+
+                        if(index == -1){
+                            index = data.size()-1;
+                        }
+
                     }
                 }
 
@@ -110,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             if(prev.getY() == DEFAULT_CURRENT_Y){
                 next.setY(DEFAULT_PREV_Y);
 
-                View temp = current;
+                TextView temp = current;
                 current = prev;
                 prev = next;
                 next = temp;
@@ -125,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             if(next.getY() == DEFAULT_CURRENT_Y){
                 prev.setY(DEFAULT_NEXT_Y);
 
-                View temp = prev;
+                TextView temp = prev;
                 prev = current;
                 current = next;
                 next = temp;
