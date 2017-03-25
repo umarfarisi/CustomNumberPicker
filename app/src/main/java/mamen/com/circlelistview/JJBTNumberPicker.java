@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListener{
 
-    public static final float DIFFERENT = 15;
+    public static final float DIFFERENT = 10;
     public static final float DEFAULT_CURRENT_Y = 0;
     public static final float DEFAULT_PREV_Y = -240;
     public static final float DEFAULT_NEXT_Y = 240;
@@ -100,6 +101,43 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
             oldY = event.getY();
 
+        }else if(event.getAction() == MotionEvent.ACTION_UP){
+
+            if(current.getY() < DEFAULT_CURRENT_Y) {
+                //current and next
+                float differentInCurrent = -current.getY();
+                float differentInNext = next.getY();
+                if (differentInCurrent <= differentInNext) {
+                    //visible for current
+                    while (differentInCurrent > DEFAULT_CURRENT_Y) {
+                        setScrollDown();
+                        differentInCurrent -= DIFFERENT;
+                    }
+                } else {
+                    //visible for next
+                    while (differentInNext > DEFAULT_CURRENT_Y) {
+                        setScrollUp();
+                        differentInNext -= DIFFERENT;
+                    }
+                }
+            }else if (current.getY() > DEFAULT_CURRENT_Y){
+                //current and next
+                float differentInCurrent = current.getY();
+                float differentInPrev = -prev.getY();
+                if (differentInCurrent <= differentInPrev) {
+                    //visible for current
+                    while (differentInCurrent > DEFAULT_CURRENT_Y) {
+                        setScrollUp();
+                        differentInCurrent -= DIFFERENT;
+                    }
+                } else {
+                    //visible for next
+                    while (differentInPrev > DEFAULT_CURRENT_Y) {
+                        setScrollDown();
+                        differentInPrev -= DIFFERENT;
+                    }
+                }
+            }
         }
 
         return true;
