@@ -3,8 +3,10 @@ package mamen.com.circlelistview;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -20,9 +22,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
     public static final float DIFFERENT = 1;
     public static final float DEFAULT_CURRENT_Y = 0;
-    public static final float DEFAULT_PREV_Y = -240;
-    public static final float DEFAULT_NEXT_Y = 240;
-    private static final float MINIMUM_VELOCITY = 20;
+    private static final float MINIMUM_VELOCITY = 10;
 
     private float oldY;
 
@@ -126,24 +126,72 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
             velocityTracker.computeCurrentVelocity(1000);
 
-            float velocity = Math.abs(velocityTracker.getYVelocity());
+            final float velocity = Math.abs(velocityTracker.getYVelocity());
 
             if(velocity > MINIMUM_VELOCITY){
                 if(velocityTracker.getYVelocity() > 0){
                     //kebawah
-                    while (velocity > 0){
-                        velocity -=MINIMUM_VELOCITY;
-                        setScrollDown(DIFFERENT);
-                    }
+                    new AsyncTask<Void, Void, Void>(){
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                float velocityFromBackgroundThread = velocity;
+                                while (velocityFromBackgroundThread > 0) {
+                                    velocityFromBackgroundThread -= MINIMUM_VELOCITY;
+                                    publishProgress();
+                                    Thread.sleep(1);
+                                }
+                            } catch (InterruptedException e) {
+
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onProgressUpdate(Void... values) {
+                            setScrollDown(DIFFERENT);
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            scrollToVisibleItem();
+                        }
+
+                    }.execute();
+
                 }else{
                     //keatas
-                    while (velocity > 0){
-                        velocity -=MINIMUM_VELOCITY;
-                        setScrollUp(DIFFERENT);
-                    }
+                    new AsyncTask<Void, Void, Void>(){
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                float velocityFromBackgroundThread = velocity;
+                                while (velocityFromBackgroundThread > 0) {
+                                    velocityFromBackgroundThread -= MINIMUM_VELOCITY;
+                                    publishProgress();
+                                    Thread.sleep(1);
+                                }
+                            } catch (InterruptedException e) {
+
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onProgressUpdate(Void... values) {
+                            setScrollUp(DIFFERENT);
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            scrollToVisibleItem();
+                        }
+                    }.execute();
+
                 }
             }
-            scrollToVisibleItem();
 
         } else if(event.getAction() == MotionEvent.ACTION_CANCEL){
             velocityTracker.clear();
@@ -153,39 +201,119 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
     }
 
     private void scrollToVisibleItem() {
+        Log.d("IMMMM","INN");
         if(current.getY() < DEFAULT_CURRENT_Y) {
             //current and next
-            float differentInCurrent = -current.getY();
-            float differentInNext = next.getY();
+            final float differentInCurrent = -current.getY();
+            final float differentInNext = next.getY();
             if (differentInCurrent <= differentInNext) {
                 //visible for current
-                while (differentInCurrent > DEFAULT_CURRENT_Y) {
-                    setScrollDown(DIFFERENT);
-                    differentInCurrent -= DIFFERENT;
-                }
+
+                new AsyncTask<Void, Void, Void>(){
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            float differentInCurrentFromBackgroundThread = differentInCurrent;
+                            while (differentInCurrentFromBackgroundThread > DEFAULT_CURRENT_Y) {
+                                publishProgress();
+                                differentInCurrentFromBackgroundThread -= DIFFERENT;
+                                Thread.sleep(5);
+                            }
+                        } catch (InterruptedException e) {
+
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Void... values) {
+                        setScrollDown(DIFFERENT);
+                    }
+                }.execute();
+
             } else {
                 //visible for next
-                while (differentInNext > DEFAULT_CURRENT_Y) {
-                    setScrollUp(DIFFERENT);
-                    differentInNext -= DIFFERENT;
-                }
+
+                new AsyncTask<Void, Void, Void>(){
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            float differentInNextFromBackgroundThread = differentInNext;
+                            while (differentInNextFromBackgroundThread > DEFAULT_CURRENT_Y) {
+                                publishProgress();
+                                differentInNextFromBackgroundThread -= DIFFERENT;
+                                Thread.sleep(5);
+                            }
+                        } catch (InterruptedException e) {
+
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Void... values) {
+                        setScrollUp(DIFFERENT);
+                    }
+                }.execute();
+
             }
         }else if (current.getY() > DEFAULT_CURRENT_Y){
-            //current and next
-            float differentInCurrent = current.getY();
-            float differentInPrev = -prev.getY();
+            //current and prev
+            final float differentInCurrent = current.getY();
+            final float differentInPrev = -prev.getY();
             if (differentInCurrent <= differentInPrev) {
                 //visible for current
-                while (differentInCurrent > DEFAULT_CURRENT_Y) {
-                    setScrollUp(DIFFERENT);
-                    differentInCurrent -= DIFFERENT;
-                }
+                new AsyncTask<Void, Void, Void>(){
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            float differentInCurrentFromBackgroundThread = differentInCurrent;
+                            while (differentInCurrentFromBackgroundThread > DEFAULT_CURRENT_Y) {
+                                publishProgress();
+                                differentInCurrentFromBackgroundThread -= DIFFERENT;
+                                Thread.sleep(5);
+                            }
+                        } catch (InterruptedException e) {
+
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Void... values) {
+                        setScrollUp(DIFFERENT);
+                    }
+                }.execute();
+
             } else {
                 //visible for next
-                while (differentInPrev > DEFAULT_CURRENT_Y) {
-                    setScrollDown(DIFFERENT);
-                    differentInPrev -= DIFFERENT;
-                }
+
+                new AsyncTask<Void, Void, Void>(){
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            float differentInPrevFromBackgroundThread = differentInPrev;
+                            while (differentInPrevFromBackgroundThread > DEFAULT_CURRENT_Y) {
+                                publishProgress();
+                                differentInPrevFromBackgroundThread -= DIFFERENT;
+                                Thread.sleep(5);
+                            }
+                        } catch (InterruptedException e) {
+
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Void... values) {
+                        setScrollDown(DIFFERENT);
+                    }
+                }.execute();
+
             }
         }
     }
@@ -196,12 +324,14 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         prev.setY(prev.getY() + different);
 
         if(prev.getY() >= DEFAULT_CURRENT_Y){
-            next.setY(DEFAULT_PREV_Y);
+
 
             TextView temp = current;
             current = prev;
             prev = next;
             next = temp;
+
+            prev.setY(current.getY()-prev.getHeight());
 
             indexOfCurrent--;
 
@@ -225,12 +355,12 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
         if(next.getY() <= DEFAULT_CURRENT_Y){
 
-            prev.setY(DEFAULT_NEXT_Y);
-
             TextView temp = prev;
             prev = current;
             current = next;
             next = temp;
+
+            next.setY(current.getY()+current.getHeight());
 
             indexOfCurrent++;
 
