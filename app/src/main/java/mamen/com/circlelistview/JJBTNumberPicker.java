@@ -34,6 +34,8 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
     private int indexOfCurrent;
 
+    private boolean isTouchAgain;
+
     private VelocityTracker velocityTracker;
 
     public JJBTNumberPicker(Context context) {
@@ -104,9 +106,13 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
             if(velocityTracker == null){
                 velocityTracker = VelocityTracker.obtain();
+            }else{
+                velocityTracker.clear();
             }
 
             velocityTracker.addMovement(event);
+
+            isTouchAgain = true;
 
         } else if(event.getAction() == MotionEvent.ACTION_MOVE) {
 
@@ -124,6 +130,8 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
         }else if(event.getAction() == MotionEvent.ACTION_UP){
 
+            isTouchAgain = false;
+
             velocityTracker.computeCurrentVelocity(1000);
 
             final float velocity = Math.abs(velocityTracker.getYVelocity());
@@ -137,7 +145,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
                         protected Void doInBackground(Void... params) {
                             try {
                                 float velocityFromBackgroundThread = velocity;
-                                while (velocityFromBackgroundThread > 0) {
+                                while (velocityFromBackgroundThread > 0 && !isTouchAgain) {
                                     velocityFromBackgroundThread -= MINIMUM_VELOCITY;
                                     publishProgress();
                                     Thread.sleep(1);
@@ -150,7 +158,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                         @Override
                         protected void onProgressUpdate(Void... values) {
-                            setScrollDown(DIFFERENT);
+                            if(!isTouchAgain)setScrollDown(DIFFERENT);
                         }
 
                         @Override
@@ -168,7 +176,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
                         protected Void doInBackground(Void... params) {
                             try {
                                 float velocityFromBackgroundThread = velocity;
-                                while (velocityFromBackgroundThread > 0) {
+                                while (velocityFromBackgroundThread > 0 && !isTouchAgain) {
                                     velocityFromBackgroundThread -= MINIMUM_VELOCITY;
                                     publishProgress();
                                     Thread.sleep(1);
@@ -186,11 +194,13 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                         @Override
                         protected void onPostExecute(Void aVoid) {
-                            scrollToVisibleItem();
+                            if(!isTouchAgain)scrollToVisibleItem();
                         }
                     }.execute();
 
                 }
+            }else{
+                if(!isTouchAgain)scrollToVisibleItem();
             }
 
         } else if(event.getAction() == MotionEvent.ACTION_CANCEL){
