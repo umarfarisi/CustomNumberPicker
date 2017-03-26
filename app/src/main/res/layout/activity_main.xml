@@ -69,6 +69,7 @@
         android:layout_margin="2dp"/>
 
     <Button
+        android:id="@+id/showButton"
         android:text="Show"
         android:textColor="@android:color/white"
         android:background="@android:color/black"

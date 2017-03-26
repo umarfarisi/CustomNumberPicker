@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -34,6 +33,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
     private int indexOfCurrent;
 
+    //flag to determine if user touche number picker again or not
     private boolean isTouchAgain;
 
     private VelocityTracker velocityTracker;
@@ -74,6 +74,12 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         addView(next);
     }
 
+    /**
+     * This method has function for set initial value for number in this number picker class
+     * @param from minimum data in this number picker
+     * @param until maximum data in this number picker
+     * @param startFromIndex first number index which will be visible to user
+     */
     public void setValue(int from, int until, int startFromIndex){
         indexOfCurrent = startFromIndex;
 
@@ -121,9 +127,9 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
             float different = oldY - event.getY();
 
             if(different > 0.1){ // keatas itemnya
-                setScrollUp(different);
+                scrollUp(different);
             }else { //kebawah
-                setScrollDown(-different);
+                scrollDown(-different);
             }
 
             oldY = event.getY();
@@ -158,7 +164,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                         @Override
                         protected void onProgressUpdate(Void... values) {
-                            if(!isTouchAgain)setScrollDown(DIFFERENT);
+                            if(!isTouchAgain)scrollDown(DIFFERENT);
                         }
 
                         @Override
@@ -189,7 +195,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                         @Override
                         protected void onProgressUpdate(Void... values) {
-                            setScrollUp(DIFFERENT);
+                            scrollUp(DIFFERENT);
                         }
 
                         @Override
@@ -210,8 +216,11 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         return true;
     }
 
+    /**
+     * This method has function for making decision about which number will be visible
+     * if there are two candidate number
+     */
     private void scrollToVisibleItem() {
-        Log.d("IMMMM","INN");
         if(current.getY() < DEFAULT_CURRENT_Y) {
             //current and next
             final float differentInCurrent = -current.getY();
@@ -238,7 +247,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                     @Override
                     protected void onProgressUpdate(Void... values) {
-                        setScrollDown(DIFFERENT);
+                        scrollDown(DIFFERENT);
                     }
                 }.execute();
 
@@ -264,7 +273,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                     @Override
                     protected void onProgressUpdate(Void... values) {
-                        setScrollUp(DIFFERENT);
+                        scrollUp(DIFFERENT);
                     }
                 }.execute();
 
@@ -294,7 +303,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                     @Override
                     protected void onProgressUpdate(Void... values) {
-                        setScrollUp(DIFFERENT);
+                        scrollUp(DIFFERENT);
                     }
                 }.execute();
 
@@ -320,7 +329,7 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
                     @Override
                     protected void onProgressUpdate(Void... values) {
-                        setScrollDown(DIFFERENT);
+                        scrollDown(DIFFERENT);
                     }
                 }.execute();
 
@@ -328,7 +337,11 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         }
     }
 
-    private void setScrollDown(float different) {
+    /**
+     * This method has function for scrolling down number
+     * @param different gap between old y position of item and new y position of item
+     */
+    private void scrollDown(float different) {
         next.setY(next.getY() + different);
         current.setY(current.getY() + different);
         prev.setY(prev.getY() + different);
@@ -358,7 +371,11 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         }
     }
 
-    private void setScrollUp(float different) {
+    /**
+     * This method has function for scrolling up number
+     * @param different gap between old y position of item and new y position of item
+     */
+    private void scrollUp(float different) {
         prev.setY(prev.getY() - different);
         current.setY(current.getY() - different);
         next.setY(next.getY() - different);
@@ -387,6 +404,10 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
         }
     }
 
+    /**
+     * This method has function for getting number which visible to user
+     * @return number which visible to user
+     */
     public int getNumber(){
         return Integer.valueOf(data.get(indexOfCurrent));
     }
