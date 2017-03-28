@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "mamen.com.circlelistview"
+        applicationId "mamen.com.custom.number.picker"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1

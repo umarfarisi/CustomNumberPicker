@@ -1,4 +1,4 @@
-package mamen.com.circlelistview;
+package mamen.com.picker;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

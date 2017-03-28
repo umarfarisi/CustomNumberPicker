@@ -1,4 +1,4 @@
-package mamen.com.circlelistview;
+package mamen.com.picker;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,20 +7,20 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    JJBTNumberPicker fromHourPicker;
-    JJBTNumberPicker fromMinutePicker;
-    JJBTNumberPicker untilHourPicker;
-    JJBTNumberPicker untilMinutePicker;
+    CustomNumberPicker fromHourPicker;
+    CustomNumberPicker fromMinutePicker;
+    CustomNumberPicker untilHourPicker;
+    CustomNumberPicker untilMinutePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fromHourPicker = (JJBTNumberPicker) findViewById(R.id.fromHourPicker);
-        fromMinutePicker = (JJBTNumberPicker) findViewById(R.id.fromMinutePicker);
-        untilHourPicker = (JJBTNumberPicker) findViewById(R.id.untilHourPicker);
-        untilMinutePicker = (JJBTNumberPicker) findViewById(R.id.untilMinutePicker);
+        fromHourPicker = (CustomNumberPicker) findViewById(R.id.fromHourPicker);
+        fromMinutePicker = (CustomNumberPicker) findViewById(R.id.fromMinutePicker);
+        untilHourPicker = (CustomNumberPicker) findViewById(R.id.untilHourPicker);
+        untilMinutePicker = (CustomNumberPicker) findViewById(R.id.untilMinutePicker);
 
         fromHourPicker.setValue(0,24,0);
         fromMinutePicker.setValue(0,60,0);

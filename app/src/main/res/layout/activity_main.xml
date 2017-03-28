@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="horizontal"
-    tools:context="mamen.com.circlelistview.MainActivity">
+    tools:context="mamen.com.picker.MainActivity">
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
-        <mamen.com.circlelistview.JJBTNumberPicker
+        <mamen.com.picker.CustomNumberPicker
             android:layout_centerVertical="true"
             android:gravity="center"
             android:id="@+id/fromHourPicker"
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:layout_height="110dp"
             android:orientation="vertical"/>
-        <mamen.com.circlelistview.JJBTNumberPicker
+        <mamen.com.picker.CustomNumberPicker
             android:layout_centerVertical="true"
             android:gravity="center"
             android:id="@+id/fromMinutePicker"
@@ -44,7 +44,7 @@
             android:text=":"
             android:textSize="60dp"/>
 
-        <mamen.com.circlelistview.JJBTNumberPicker
+        <mamen.com.picker.CustomNumberPicker
             android:layout_centerVertical="true"
             android:gravity="center"
             android:id="@+id/untilHourPicker"
@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:layout_height="110dp"
             android:orientation="vertical"/>
-        <mamen.com.circlelistview.JJBTNumberPicker
+        <mamen.com.picker.CustomNumberPicker
             android:layout_centerVertical="true"
             android:gravity="center"
             android:id="@+id/untilMinutePicker"

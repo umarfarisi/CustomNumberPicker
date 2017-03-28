@@ -1,4 +1,4 @@
-package mamen.com.circlelistview;
+package mamen.com.picker;
 
 
 import android.annotation.TargetApi;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListener{
+public class CustomNumberPicker extends LinearLayout implements View.OnTouchListener{
 
     public static final float DIFFERENT = 1;
     public static final float DEFAULT_CURRENT_Y = 0;
@@ -38,23 +38,23 @@ public class JJBTNumberPicker extends LinearLayout implements View.OnTouchListen
 
     private VelocityTracker velocityTracker;
 
-    public JJBTNumberPicker(Context context) {
+    public CustomNumberPicker(Context context) {
         super(context);
         setUpDefaultValue();
     }
 
-    public JJBTNumberPicker(Context context, AttributeSet attrs) {
+    public CustomNumberPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
         setUpDefaultValue();
     }
 
-    public JJBTNumberPicker(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomNumberPicker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setUpDefaultValue();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public JJBTNumberPicker(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CustomNumberPicker(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setUpDefaultValue();
     }
